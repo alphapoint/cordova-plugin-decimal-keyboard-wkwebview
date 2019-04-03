@@ -57,7 +57,6 @@ BOOL isAppInBackground=NO;
 }
 
 - (void) addDecimalButton{
-    NSLog(@"addDecimalButton");
     if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
     {
         return ; /* Device is iPad and this code works only in iPhone*/
@@ -120,7 +119,6 @@ BOOL isAppInBackground=NO;
 BOOL isDifferentKeyboardShown=NO;
 
 - (void) keyboardWillAppear: (NSNotification*) n{
-    NSLog(@"keyboardWillAppear");
     NSDictionary* info = [n userInfo];
     NSNumber* value = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     double dValue = [value doubleValue];
@@ -133,20 +131,14 @@ BOOL isDifferentKeyboardShown=NO;
 
 }
 - (void) processKeyboardShownEvent{
-    NSLog(@"processKeyboardShownEvent");
     [self isTextOrNumberAndDecimal:^(BOOL isDecimalKeyRequired) {
         // create custom button
-        NSLog(@"decimalButton");
-        
         if(decimalButton == nil){
-            NSLog(@"decimalButton == nil");
             if(isDecimalKeyRequired){
-                NSLog(@"isDecimalKeyRequired == true");
                 [self addDecimalButton];
             }
         }else{
             if(isDecimalKeyRequired){
-                NSLog(@"isDecimalKeyRequired == true 222");
                 decimalButton.hidden=NO;
                 [self setDecimalChar];
             }else{
@@ -157,17 +149,14 @@ BOOL isDifferentKeyboardShown=NO;
 }
 
 - (void)buttonPressed:(UIButton *)button {
-    NSLog(@"buttonPressed");
     [decimalButton setBackgroundColor: [UIColor colorWithRed:210/255.0 green:213/255.0 blue:218/255.0 alpha:1.0]];
     [self evaluateJavaScript:@"DecimalKeyboard.addDecimal();" completionHandler:nil];
 }
 
 - (void)buttonTapped:(UIButton *)button {
-    NSLog(@"buttonTapped");
     [decimalButton setBackgroundColor: [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1.0]];
 }
 - (void)buttonPressCancel:(UIButton *)button{
-    NSLog(@"buttonPressCancel");
     [decimalButton setBackgroundColor: [UIColor colorWithRed:210/255.0 green:213/255.0 blue:218/255.0 alpha:1.0]];
 }
 
@@ -177,9 +166,6 @@ BOOL isDifferentKeyboardShown=NO;
                BOOL isText = [response isEqual:@"text"];
                BOOL isNumber = [response isEqual:@"number"];
 
-               NSLog(@"isTextOrNumberAndDecimal");
-               NSLog(isText ? @"isText" : @"!isText");
-               NSLog(isNumber ? @"isNumber" : @"!isNumber");
                if (isText || isNumber) {
                    [self evaluateJavaScript:@"DecimalKeyboard.isDecimal();"
                           completionHandler:^(NSString * _Nullable response, NSError * _Nullable error) {
@@ -195,7 +181,7 @@ BOOL isDifferentKeyboardShown=NO;
 
 BOOL stopSearching=NO;
 - (void)listSubviewsOfView:(UIView *)view {
-    NSLog(@"listSubviewsOfView");
+
     // Get the subviews of the view
     NSArray *subviews = [view subviews];
 
@@ -203,12 +189,10 @@ BOOL stopSearching=NO;
     if ([subviews count] == 0) return; // COUNT CHECK LINE
 
     for (UIView *subview in subviews) {
-        NSLog(@"for subview in subviews");
         if(stopSearching==YES){
             break;
         }
         if([[subview description] hasPrefix:@"<UIKBKeyplaneView"] == YES){
-            NSLog(@"UIKBKeyplaneView");
             ui = subview;
             stopSearching = YES;
             CGFloat height= 0.0;
@@ -236,7 +220,7 @@ BOOL stopSearching=NO;
 
 - (void) evaluateJavaScript:(NSString *)script
           completionHandler:(void (^ _Nullable)(NSString * _Nullable response, NSError * _Nullable error))completionHandler {
-    NSLog(@"evaluateJavaScript");
+
     if ([self.webView isKindOfClass:UIWebView.class]) {
         UIWebView *webview = (UIWebView*)self.webView;
         NSString *response = [webview stringByEvaluatingJavaScriptFromString:script];
@@ -244,11 +228,9 @@ BOOL stopSearching=NO;
     }
 
     else if ([self.webView isKindOfClass:WKWebView.class]) {
-        NSLog(@"[self.webView isKindOfClass:WKWebView.class]");
         WKWebView *webview = (WKWebView*)self.webView;
         [webview evaluateJavaScript:script completionHandler:^(id result, NSError *error) {
             if (completionHandler) {
-                NSLog(@"completionHandler");
                 if (error) completionHandler(nil, error);
                 else completionHandler([NSString stringWithFormat:@"%@", result], nil);
             }
