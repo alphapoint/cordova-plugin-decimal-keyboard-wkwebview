@@ -125,11 +125,6 @@ BOOL isDifferentKeyboardShown=NO;
     NSNumber* value = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
     double dValue = [value doubleValue];
 
-    if(dValue <= 0.0){
-        [self removeDecimalButton];
-        return;
-    }
-
     dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * dValue);
     dispatch_after(delay, dispatch_get_main_queue(), ^(void){
         [self processKeyboardShownEvent];
@@ -145,7 +140,6 @@ BOOL isDifferentKeyboardShown=NO;
         
         if(decimalButton == nil){
             NSLog(@"decimalButton == nil");
-            [self addDecimalButton];
             if(isDecimalKeyRequired){
                 NSLog(@"isDecimalKeyRequired == true");
                 [self addDecimalButton];

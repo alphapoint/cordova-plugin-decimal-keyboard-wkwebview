@@ -5,12 +5,18 @@ exec = require('cordova/exec');
 var DecimalKeyboard = function() {
 	
 };
+
+DecimalKeyboard.getActiveElement = function() {
+	return window.frames[0].document.activeElement;
+}
+
 DecimalKeyboard.getActiveElementType= function(){
-	return document.activeElement.type;
+	return DecimalKeyboard.getActiveElement().type;
 };
+
 DecimalKeyboard.isDecimal = function(){
 	var showDecimal = null;
-	var activeElement = document.activeElement;
+	var activeElement = DecimalKeyboard.getActiveElement();
 	if(activeElement.attributes["decimal"]==undefined || 
 		activeElement.attributes["decimal"]=='undefined' || 
 		activeElement.attributes["decimal"].value=='false'){
@@ -38,7 +44,7 @@ DecimalKeyboard.addDecimalAtPos = function(val,position){
 
 };
 DecimalKeyboard.addDecimal = function(){
-	var activeElement = document.activeElement;
+	var activeElement = DecimalKeyboard.getActiveElement();
 	var allowMultipleDecimals = true;
 	if(activeElement.attributes["allow-multiple-decimals"]==undefined || 
 		activeElement.attributes["allow-multiple-decimals"]=='undefined' || 
